@@ -126,6 +126,13 @@ public class DoublyLinkedListTester
   public void testGet(){
 	  assertEquals("Check Get",(Integer)3, several.get(2));
   }
+  
+  /**Test clear method*/
+  @Test
+  public void testClear(){
+	  slist.clear();
+	  assertEquals("Check Clear",null, slist.get(0));
+  }
 
   
 //  /** Test iterator on empty list and several list */

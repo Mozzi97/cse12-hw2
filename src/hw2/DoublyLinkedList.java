@@ -339,11 +339,19 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 	public boolean removeFirstOccurrence(Object o) throws NullPointerException {
 		return false; //XXX-CHANGE-XXX
 	}
-	/** Clear the linked list */
+	/** Clear the linked list and release the nodes */
 	public void clear()
 	{
+		Node myNode = head.next;
+		while (myNode != head) {
+			Node nextNode = myNode.next;
+			myNode.next = myNode.prev = null;
+			myNode.data = null;
+			myNode = nextNode;
+		}
 		head.next = tail;
 		tail.prev = head;
+		nelems = 0;
 	}
 
 	/** Determine if the list empty 
