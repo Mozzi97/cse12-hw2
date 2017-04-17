@@ -167,19 +167,19 @@ public class DoublyLinkedListTester
   }
 
   
-//  /** Test iterator on empty list and several list */
-//  @Test
-//  public void testIterator()
-//  {
-//    int counter = 0 ;
-//    ListIterator<Integer> iter;
-//    for (iter = empty.listIterator() ; iter.hasNext(); )
-//    {
-//      fail("Iterating empty list and found element") ;
-//    }
-//    counter = 0 ;
-//    for (iter = several.listIterator() ; iter.hasNext(); iter.next())
-//      counter++;
-//    assertEquals("Iterator several count", counter, DIM);
-//  }
+  /** Test iterator on empty list and several list */
+  @Test
+  public void testIterator()
+  {
+    int counter = 0 ;
+    ListIterator<Integer> iter;
+    for (iter = empty.listIterator() ; iter.hasNext(); )
+    {
+      fail("Iterating empty list and found element") ;
+    }
+    counter = 0 ;
+    for (iter = several.listIterator() ; iter.hasNext(); iter.next())
+      counter++;
+    assertEquals("Iterator several count", counter, DIM);
+  }
 }

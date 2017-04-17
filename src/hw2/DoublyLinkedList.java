@@ -94,58 +94,180 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		private boolean forward;
 		private boolean canRemove;
 		private Node left,right; // Cursor sits between these two nodes
-		private int index;        
+		private int index;
 		// Tracks current position. what next() would return
+		private Node curNode;
 
 		public MyListIterator()
 		{
-			MyListIterator it = new MyListIterator();
-		}
 
+			forward = false;
+			canRemove = false;
+			left = head;
+			right = head.next;
+			index = -1;
+		}
+		
+		
+		/**
+		 * Adds a node to a certain index in the list
+		 * 
+		 * @param e Element to be added.
+		 * @throws NullPointerException if data received is null.
+		 */
 		@Override
 		public void add(E e) throws  NullPointerException
 		{
+			if(e == null){
+				throw new NullPointerException();
+			}
+			Node newNode = new Node(e);
+			left.next = newNode;
+			newNode.prev = left;
+			newNode.next = right;
+			right.prev = newNode;
+			left = newNode;
+			curNode = null;
+			index ++;
+			
 		}
+		
+		/**
+		 * Checks if there is another element to be retrieved by calling next 
+		 */
 		@Override
 		public boolean hasNext()
 		{
-			return false; // XXX-CHANGE-XXX
+			curNode = null;
+			if(right == tail){
+				return false;
+			}
+			return true; // XXX-CHANGE-XXX
 		}
-
+		
+		/**
+		 * Checks if there is another element to be retrieved by calling 
+		 * previous 
+		 */
 		@Override
 		public boolean hasPrevious()
 		{
-			return false; // XXX-CHANGE-XXX
+			curNode = null;
+			if(left == head){
+				return false;
+			}
+			return true; // XXX-CHANGE-XXX
 		}
+		
+		/**
+		 * Advances through the list by one index, and retrieves the next 
+		 * element
+		 * 
+		 * @throws NoSuchElementException if there are no more elements 
+		 * remaining in the list for the iterator to retrieve when moving 
+		 * forward
+		 */
 		@Override
 		public E next() throws NoSuchElementException
 		{
-			return (E) null;  // XXX-CHANGE-XXX
+			if(this.hasNext() || this.hasPrevious()){
+				throw new NoSuchElementException();
+			}
+			curNode = right;
+			left = left.next;
+			right = right.next;
+			index ++;
+			forward = true;
+			return (E) curNode.data;  // XXX-CHANGE-XXX
 		}
+		/**
+		 * Retrieves the index of the next element (that would be retrieved by 
+		 * next() call)
+		 */
 		@Override
 		public int nextIndex()
 		{
-			return 0; // XXX-CHANGE-XXX
+			curNode = null;
+			return index; // XXX-CHANGE-XXX
 		}
+		
+		/**
+		 * Advances through the list by one index, and retrieves the previous 
+		 * element
+		 * 
+		 * @throws NoSuchElementException if there are no more elements 
+		 * remaining in the list for the iterator to retrieve when moving 
+		 * backwards
+		 */
 		@Override
 		public E previous() throws NoSuchElementException
 		{
-			return (E) null; // XXX-CHANGE-XXX
-		}
+			if(this.hasNext() || this.hasPrevious()){
+				throw new NoSuchElementException();
+			}
+			curNode = left;
+			left = left.prev;
+			right = right.prev;
+			index --;
+			forward = false;
 
+			return (E) curNode.data;  // XXX-CHANGE-XXX
+		}
+		
+		/**
+		 * Retrieves the index of the next element (that would be retrieved by 
+		 * previous() call)
+		 */
 		@Override
 		public int previousIndex()
 		{
-			return 0;  // XXX-CHANGE-XXX
+			curNode = null;
+			return index;  // XXX-CHANGE-XXX
 		}
+		
+		/**
+		 *Removes from the list the last element that was returned by next() or 
+		 *previous()
+		 * 
+		 * @throws IllegalStateException if neither next() nor previous() were 
+		 * called, or if add() or remove() were	called since the last 
+		 * next()/previous() call.
+		 */
 		@Override
 		public void remove() throws IllegalStateException
 		{
+			if(curNode == null){
+				throw new IllegalStateException();
+			}
+			right = curNode.next;
+			left.next = curNode.next;
+			right.prev = curNode.prev;
+			curNode.next = null;
+			curNode.prev = null;
+			index --;
 		}
+		
+		/**
+		 * Replaces	the	last element returned by next() or previous() with a 
+		 * given element
+		 * 
+		 * @param 
+		 * @throws Throw NullPointerException if the data given	is null
+		 * @throws IllegalStateException if neither next() nor previous() were 
+		 * called, or if add() or remove() were	called since the last 
+		 * next()/previous() call.
+		 */
 		@Override
 		public void set(E e) 
 				throws NullPointerException,IllegalStateException
 		{
+			if(curNode == null){
+				throw new IllegalStateException();
+			}
+			if(e == null){
+				throw new NullPointerException();
+			}
+			curNode.data = e;
 		}
 
 	}
@@ -426,6 +548,7 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 
 	/*  UNCOMMENT the following when you believe your MyListIterator class is
    functioning correctly
+   */
    public Iterator<E> iterator()
    {
    return new MyListIterator();
@@ -434,5 +557,5 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
    {
    return new MyListIterator();
    }
-	 */
+	 
 }
