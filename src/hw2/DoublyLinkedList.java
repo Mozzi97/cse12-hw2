@@ -12,6 +12,8 @@ package hw2;
 
 import java.util.*;
 
+//some comments
+
 public class DoublyLinkedList<E> extends AbstractList<E> {
 
 	private int nelems;   //No. of items in the list
