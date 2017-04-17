@@ -282,7 +282,14 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		if(o == null){
 			throw new NullPointerException();
 		}
-	   return -1; //XXX-CHANGE-XXX
+//		if(o instanceof DooublyLinkedList){
+		if(this.getNth(nelems - 1) != null){
+			return nelems - 1;
+		}
+		else{
+			return -1;	
+		}
+	    //XXX-CHANGE-XXX
 	}
 	/**
 	 * Sets the value of an element at a certain index in the list.
@@ -311,11 +318,27 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		myNode.setElement(data);
 		return myNode.data;
 	}
-
+	
+	/**
+	 * remove the element from position i in this list
+	 * 
+	 * @param index Where the element should be removed.
+	 * @return the element that was removed
+	 * @throws IndexOutOfBoundsException if index received is out of bounds for 
+	 *             the current list. 
+	 */
 	@Override
 	public E remove(int index) throws IndexOutOfBoundsException
 	{
-		return (E) null; // XXX-CHANGE-XXX
+		if(index < 0 || index >= nelems){
+			throw new IndexOutOfBoundsException();
+		}
+//		Node nextNode = this.getNth(index).next;
+//		Node prevNode = this.getNth(index).prev;
+//		prevNode.next = nextNode;
+//		nextNode.prev = prevNode;
+		this.getNth(index).data = null;
+		return (E) this.getNth(index).data; // XXX-CHANGE-XXX
 	}
 
 	/**Returns true if this list contains the specified element,
@@ -326,7 +349,14 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 	 */
 	@Override
 	public boolean contains(Object o) throws NullPointerException {
-
+		if(o == null){
+			throw new NullPointerException();
+		}
+		for(int i = 0; i < nelems; i++){
+			if(this.getNth(i).data.equals(o)){
+				return true;
+			}
+		}
 		return false; //XXX-CHANGE-XXX
 	}
 	/**Removes the first occurrence of the specified element in this list,
@@ -337,13 +367,22 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 	 * @throws NullPointerException if the data is null
 	 */
 	public boolean removeFirstOccurrence(Object o) throws NullPointerException {
+		if(o == null){
+			throw new NullPointerException();
+		}
+		for(int i = 0; i < nelems; i++){
+			if(this.getNth(i).data.equals(o)){
+				this.getNth(i).data = null;
+				return true;
+			}
+		}
 		return false; //XXX-CHANGE-XXX
 	}
 	/** Clear the linked list and release the nodes */
 	public void clear()
 	{
 		Node myNode = head.next;
-		while (myNode != head) {
+		while (myNode != head && myNode.next != null) {
 			Node nextNode = myNode.next;
 			myNode.next = myNode.prev = null;
 			myNode.data = null;

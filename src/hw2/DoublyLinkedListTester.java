@@ -131,7 +131,39 @@ public class DoublyLinkedListTester
   @Test
   public void testClear(){
 	  slist.clear();
-	  assertEquals("Check Clear",null, slist.get(0));
+	  assertEquals("Check Clear",true, slist.isEmpty());
+  }
+  
+  /**Test lastIndexOf method*/
+  @Test
+  public void testLastIndexOf(){
+	  assertEquals("Check get last index",1,slist.lastIndexOf(slist));
+  }
+  
+  /**Test remove method*/
+  @Test
+  public void testRemove(){
+	  several.remove(3);
+	  assertEquals("Check remove",null,several.get(3));
+  }
+  
+  /**Test contains method*/
+  @Test
+  public void testContains(){
+	  several.contains(3);
+	  slist.contains("First");
+	  assertEquals("Check contains",true,several.contains(3));
+	  assertEquals("Check contains",true,slist.contains("First"));
+  }
+  
+  /**Test removeFirstOccurrence method*/
+  @Test
+  public void testRemoveFirstOccurrence(){
+//	  several.removeFirstOccurrence(3);
+//	  slist.removeFirstOccurrence("First");
+	  assertEquals("Check Remove First Occurrence",true,several.removeFirstOccurrence((Integer)3));
+	  assertEquals("Check Remove First Occurrence",true,slist.removeFirstOccurrence("First"));
+	  assertEquals("Check Remove First Occurrence",null,several.get(2));
   }
 
   
