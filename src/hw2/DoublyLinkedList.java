@@ -40,7 +40,7 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		public Node(E element, Node prevNode, Node nextNode)
 		{
 			data = element;
-			Node nod = new Node(data);
+			Node node = new Node(data);
 			next = nextNode;
 			prev = prevNode;
 		}
@@ -279,6 +279,9 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 	 */
 	@Override
 	public int lastIndexOf(Object o) throws NullPointerException {
+		if(o == null){
+			throw new NullPointerException();
+		}
 	   return -1; //XXX-CHANGE-XXX
 	}
 	/**
@@ -364,7 +367,11 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 	// Helper method to get the Node at the Nth index
 	private Node getNth(int index) 
 	{
-		return (Node) null;  // XXX-CHANGE-XXX
+		Node myNode = head;
+		for(int i = 0; i <= index; i ++){
+			myNode = myNode.next;
+		}
+		return (Node) myNode;  // XXX-CHANGE-XXX
 	}
 
 
