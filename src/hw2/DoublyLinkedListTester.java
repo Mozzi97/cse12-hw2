@@ -9,6 +9,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -78,6 +79,14 @@ public class DoublyLinkedListTester
   {
     slist.set(1,"Final");
     assertEquals("Setting specific value", "Final",slist.get(1));
+    try 
+    {
+      slist.set(10,null);
+      slist.set(10,(String) "Hello");
+      fail("Should have generated an exception");  
+    }
+    catch(IndexOutOfBoundsException e){}
+    catch(NullPointerException e){}
   }
   
   /** Test isEmpty */
@@ -111,7 +120,16 @@ public class DoublyLinkedListTester
   public void testAddIndex(){
 	  several.add(1,new Integer(10));
 	  assertEquals("Check Add at index",(Integer)10,several.get(1));
-  }
+	    try 
+	    {
+	      slist.add(null);
+	      several.add(10,7);
+	      fail("Should have generated an exception");  
+	    }
+	    catch(IndexOutOfBoundsException e){}
+	    catch(NullPointerException e){}
+}
+  
   
   /**Test add(E) method*/
   @Test
@@ -119,13 +137,26 @@ public class DoublyLinkedListTester
 	  slist.add("New Last");
 	  System.out.println(slist.get(0));
 	  assertEquals("Check Add","New Last",slist.get(2));
+	    try 
+	    {
+	      slist.add(null);
+	      fail("Should have generated an exception");  
+	    }
+	    catch(NullPointerException e){}
   }
   
   /**Test get method*/
   @Test
   public void testGet(){
 	  assertEquals("Check Get",(Integer)3, several.get(2));
-  }
+	    try 
+	    {
+	      slist.get(7);
+	      fail("Should have generated an exception");  
+	    }
+	    catch(IndexOutOfBoundsException e){}
+}
+  
   
   /**Test clear method*/
   @Test
@@ -138,6 +169,12 @@ public class DoublyLinkedListTester
   @Test
   public void testLastIndexOf(){
 	  assertEquals("Check get last index",1,slist.lastIndexOf(slist));
+	    try 
+	    {
+	      slist.lastIndexOf(null);
+	      fail("Should have generated an exception");  
+	    }
+	    catch(NullPointerException e){}
   }
   
   /**Test remove method*/
@@ -145,6 +182,12 @@ public class DoublyLinkedListTester
   public void testRemove(){
 	  several.remove(3);
 	  assertEquals("Check remove",null,several.get(3));
+	    try 
+	    {
+	      slist.remove(10);
+	      fail("Should have generated an exception");  
+	    }
+	    catch(IndexOutOfBoundsException e){}
   }
   
   /**Test contains method*/
@@ -154,16 +197,28 @@ public class DoublyLinkedListTester
 	  slist.contains("First");
 	  assertEquals("Check contains",true,several.contains(3));
 	  assertEquals("Check contains",true,slist.contains("First"));
+	    try 
+	    {
+	      slist.contains(null);
+	      fail("Should have generated an exception");  
+	    }
+	    catch(NullPointerException e){}
   }
   
   /**Test removeFirstOccurrence method*/
   @Test
   public void testRemoveFirstOccurrence(){
-//	  several.removeFirstOccurrence(3);
-//	  slist.removeFirstOccurrence("First");
-	  assertEquals("Check Remove First Occurrence",true,several.removeFirstOccurrence((Integer)3));
-	  assertEquals("Check Remove First Occurrence",true,slist.removeFirstOccurrence("First"));
+	  assertEquals("Check Remove First Occurrence",true,
+			  several.removeFirstOccurrence((Integer)3));
+	  assertEquals("Check Remove First Occurrence",true,
+			  slist.removeFirstOccurrence("First"));
 	  assertEquals("Check Remove First Occurrence",null,several.get(2));
+	    try 
+	    {
+	      slist.removeFirstOccurrence(null);
+	      fail("Should have generated an exception");  
+	    }
+	    catch(NullPointerException e){}
   }
 
   
@@ -182,4 +237,154 @@ public class DoublyLinkedListTester
       counter++;
     assertEquals("Iterator several count", counter, DIM);
   }
+  
+  /** Test iterator add method */
+  @Test
+  public void testItAdd(){
+	  ListIterator<Integer> ite;
+	  ite = several.listIterator();
+	  ite.next();
+	  ite.add((Integer) 4);
+	  assertEquals("Iterator add", (Integer) 4, ite.previous());
+	    try 
+	    {
+	      ite.next();
+	      ite.set(null);
+	      fail("Should have generated an exception");  
+	    }
+	    catch(NullPointerException e){}
+  }
+  
+  /** Test iterator hasNext method */
+  @Test
+  public void testIthasNext(){
+	  ListIterator<Integer> ite;
+	  ite = several.listIterator();
+	  ite.next();
+	  ite.add((Integer) 4);
+
+	  assertEquals("Iterator hasNext", true,ite.hasNext());
+  }
+  
+  /** Test iterator hasPrevious method */
+  @Test
+  public void testIthasPrevious(){
+	  ListIterator<Integer> ite;
+	  ite = several.listIterator();
+	  ite.next();
+	  ite.add((Integer) 4);
+	  ite.previous();
+	  assertEquals("Iterator hasPrevious", true,ite.hasPrevious());
+	  ite.previous();
+	  assertEquals("Iterator hasPrevious", false,ite.hasPrevious());
+  }
+  
+  /** Test iterator Next method */
+  @Test
+  public void testItNext(){
+	  ListIterator<Integer> ite;
+	  ite = several.listIterator();
+	  ite.next();
+	  ite.add((Integer) 4);
+	  ite.next();
+	  ite.next();
+	  assertEquals("Iterator next",(Integer) 3,ite.previous());
+	    try 
+	    {
+	      ite = empty.listIterator();
+	      ite.next();
+	      fail("Should have generated an exception");  
+	    }
+	    catch(NoSuchElementException e)
+	    {
+	      //  normal
+	    }
+  }
+  
+  /** Test iterator previous method */
+  @Test
+  public void testItPrevious(){
+	  ListIterator<Integer> ite;
+	  ite = several.listIterator();
+	  ite.next();
+	  ite.add((Integer) 4);
+	  ite.next(); ite.next(); ite.previous();
+
+	  assertEquals("Iterator previous",(Integer) 3,ite.next());
+	    try 
+	    {
+	      ite = empty.listIterator();
+	      ite.next();
+	      fail("Should have generated an exception");  
+	    }
+	    catch(NoSuchElementException e)
+	    {
+	      //  normal
+	    }
+  }
+  
+  /** Test iterator nextIndex method */
+  @Test
+  public void testItNextIndex(){
+	  ListIterator<Integer> ite;
+	  ite = several.listIterator();
+	  ite.next();
+	  ite.add((Integer) 4);
+	  ite.next(); //ite.next(); ite.previous();
+
+	  assertEquals("Iterator nextIndex",(int) 2,ite.nextIndex());
+  }
+  
+  /** Test iterator previousIndex method */
+  @Test
+  public void testItPreviousIndex(){
+	  ListIterator<Integer> ite;
+	  ite = several.listIterator();
+	  ite.next();
+	  ite.add((Integer) 4);
+	  ite.next(); ite.next(); ite.previous();
+
+	  assertEquals("Iterator previousIndex",(int) 2,ite.previousIndex());
+  }
+  
+  /** Test iterator set method */
+  @Test
+  public void testItSet(){
+	  ListIterator<Integer> ite;
+	  ite = several.listIterator();
+	  ite.next();
+	  ite.add((Integer) 4);
+	  ite.next();
+	  ite.set((Integer) 9);
+	  assertEquals("Iterator set",(Integer) 3,ite.next());
+	    try 
+	    {
+	      ite.next();
+	      ite.set(null);
+	      ite.add((Integer) 4);
+	      ite.set((Integer) 9);
+	      fail("Should have generated an exception");  
+	    }
+	    catch(NullPointerException e){}
+	    catch(IllegalStateException e){}
+  }
+  
+  /** Test iterator remove method */
+  @Test
+  public void testItRemove(){
+	  ListIterator<Integer> ite;
+	  ite = several.listIterator();
+	  ite.next();
+	  ite.next();
+	  ite.remove();
+	  assertEquals("Iterator remove",(Integer) 3,ite.next());
+	    try 
+	    {
+	      ite.add((Integer) 4);
+	      ite.remove();
+	      fail("Should have generated an exception");  
+	    }
+	    catch(IllegalStateException e){}
+  }
+  
 }

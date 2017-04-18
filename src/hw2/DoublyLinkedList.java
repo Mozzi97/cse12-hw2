@@ -96,11 +96,9 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		private Node left,right; // Cursor sits between these two nodes
 		private int index;
 		// Tracks current position. what next() would return
-		private Node curNode;
 
 		public MyListIterator()
 		{
-
 			forward = false;
 			canRemove = false;
 			left = head;
@@ -122,14 +120,14 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 				throw new NullPointerException();
 			}
 			Node newNode = new Node(e);
+			canRemove = false;
 			left.next = newNode;
 			newNode.prev = left;
 			newNode.next = right;
 			right.prev = newNode;
 			left = newNode;
-			curNode = null;
-			index ++;
-			
+
+			index ++;			
 		}
 		
 		/**
@@ -138,7 +136,6 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		@Override
 		public boolean hasNext()
 		{
-			curNode = null;
 			if(right == tail){
 				return false;
 			}
@@ -152,7 +149,6 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		@Override
 		public boolean hasPrevious()
 		{
-			curNode = null;
 			if(left == head){
 				return false;
 			}
@@ -170,15 +166,15 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		@Override
 		public E next() throws NoSuchElementException
 		{
-			if(this.hasNext() || this.hasPrevious()){
+			if(!this.hasNext()){
 				throw new NoSuchElementException();
 			}
-			curNode = right;
-			left = left.next;
+			canRemove = true;
+			left = right;
 			right = right.next;
 			index ++;
 			forward = true;
-			return (E) curNode.data;  // XXX-CHANGE-XXX
+			return (E) left.data;  // XXX-CHANGE-XXX
 		}
 		/**
 		 * Retrieves the index of the next element (that would be retrieved by 
@@ -187,7 +183,9 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		@Override
 		public int nextIndex()
 		{
-			curNode = null;
+			if(!this.hasNext()){
+				return index + 1;
+			}
 			return index; // XXX-CHANGE-XXX
 		}
 		
@@ -202,16 +200,16 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		@Override
 		public E previous() throws NoSuchElementException
 		{
-			if(this.hasNext() || this.hasPrevious()){
+			if(!this.hasPrevious()){
 				throw new NoSuchElementException();
 			}
-			curNode = left;
+			canRemove = true;
 			left = left.prev;
 			right = right.prev;
 			index --;
 			forward = false;
 
-			return (E) curNode.data;  // XXX-CHANGE-XXX
+			return (E) right.data;  // XXX-CHANGE-XXX
 		}
 		
 		/**
@@ -221,7 +219,9 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		@Override
 		public int previousIndex()
 		{
-			curNode = null;
+			if(!this.hasPrevious()){
+				return -1;
+			}
 			return index;  // XXX-CHANGE-XXX
 		}
 		
@@ -236,16 +236,26 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		@Override
 		public void remove() throws IllegalStateException
 		{
-			if(curNode == null){
+			if (canRemove) {
+				if(forward){
+					left.prev.next = left.next;
+					left.next.prev = left.prev;
+					left = left.prev;
+				}
+				else{
+					right.prev.next = right.next;
+					right.next.prev = right.prev;
+					right = right.next;
+				}
+				canRemove = false;
+				index --;
+			}
+			else {
 				throw new IllegalStateException();
 			}
-			right = curNode.next;
-			left.next = curNode.next;
-			right.prev = curNode.prev;
-			curNode.next = null;
-			curNode.prev = null;
-			index --;
+			canRemove = false;
 		}
+		
 		
 		/**
 		 * Replaces	the	last element returned by next() or previous() with a 
@@ -261,13 +271,22 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		public void set(E e) 
 				throws NullPointerException,IllegalStateException
 		{
-			if(curNode == null){
-				throw new IllegalStateException();
-			}
 			if(e == null){
 				throw new NullPointerException();
 			}
-			curNode.data = e;
+			if (canRemove) {
+				if(forward){
+					left.data = e;
+				}
+				else{
+					right.data = e;
+				}
+			}
+			else {
+				throw new IllegalStateException();
+			}
+			canRemove = false;
+
 		}
 
 	}
@@ -488,7 +507,8 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 	 * @return true if the data is in the list, false otherwise
 	 * @throws NullPointerException if the data is null
 	 */
-	public boolean removeFirstOccurrence(Object o) throws NullPointerException {
+	public boolean removeFirstOccurrence(Object o) 
+			throws NullPointerException {
 		if(o == null){
 			throw new NullPointerException();
 		}
@@ -506,8 +526,7 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		Node myNode = head.next;
 		while (myNode != head && myNode.next != null) {
 			Node nextNode = myNode.next;
-			myNode.next = myNode.prev = null;
-			myNode.data = null;
+			myNode = null;
 			myNode = nextNode;
 		}
 		head.next = tail;
