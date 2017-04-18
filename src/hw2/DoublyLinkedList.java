@@ -241,6 +241,7 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 					left.prev.next = left.next;
 					left.next.prev = left.prev;
 					left = left.prev;
+					index --;
 				}
 				else{
 					right.prev.next = right.next;
@@ -248,7 +249,7 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 					right = right.next;
 				}
 				canRemove = false;
-				index --;
+
 			}
 			else {
 				throw new IllegalStateException();
@@ -579,19 +580,36 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
    
    public void sortLists(DoublyLinkedList<Integer> list2, 
 		   DoublyLinkedList<Integer> result){
+	   
 	   for(int i = 0; i <= this.size() - 1; i ++){
-		   result.add(this.getNth(i).data);
+		   result.add((Integer)this.getNth(i).data);
 	   }
 	   for(int i = 0; i <= list2.size() - 1; i ++){
 		   result.add(list2.getNth(i).data);
 	   }
-	   for(int i = 0; i <= result.size() - 2; i ++){
-		   if(result.getNth(i).data > result.getNth(i + 1).data){
+	   for(int i = 0; i < result.size() - 1; i ++){
+		   for(int j = 1; j < result.size() - i; j ++){
+		   if(result.getNth(j-1).data > result.getNth(j).data){
+
 			   Integer temp;
-			   temp = result.getNth(i).data;
-			   result.getNth(i).data = result.getNth(i + 1).data;
-			   result.getNth(i + 1).data = temp;
+			   temp = result.getNth(j-1).data;
+			   result.getNth(j-1).setElement(result.getNth(j).data);
+			   result.getNth(j).setElement(temp);
 		   }
+		   }
+		   System.out.println(result);
 	   }
 	}
+   
+   public void rotateList (int k){
+	   Node lastNode = this.getNth(nelems - 1);
+	   Node indexNode = this.getNth(nelems - k);
+	   
+	   indexNode.prev.next = tail;
+	   tail.prev = indexNode.prev;
+	   head.next.prev = lastNode;
+	   lastNode.next = head.next;
+	   indexNode.prev = head;
+	   head.next = indexNode;
+   }
 }

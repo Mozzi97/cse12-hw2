@@ -135,7 +135,6 @@ public class DoublyLinkedListTester
   @Test
   public void testAdd(){
 	  slist.add("New Last");
-	  System.out.println(slist.get(0));
 	  assertEquals("Check Add","New Last",slist.get(2));
 	    try 
 	    {
@@ -258,12 +257,12 @@ public class DoublyLinkedListTester
   /** Test iterator hasNext method */
   @Test
   public void testIthasNext(){
-	  ListIterator<Integer> ite;
-	  ite = several.listIterator();
+	  ListIterator<String> ite;
+	  ite = slist.listIterator();
 	  ite.next();
-	  ite.add((Integer) 4);
+	  ite.next();
 
-	  assertEquals("Iterator hasNext", true,ite.hasNext());
+	  assertEquals("Iterator hasNext", false,ite.hasNext());
   }
   
   /** Test iterator hasPrevious method */
