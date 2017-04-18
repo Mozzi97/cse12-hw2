@@ -36,9 +36,10 @@ public class ExtraCreditTester {
 	public void testreverseAndConcat() {
 		DoublyLinkedList<Integer> newSeveral = new DoublyLinkedList<Integer>();
 		newSeveral.reverseAndConcat(several);
-		assertEquals("Check reverseAndConcat",(Integer)11,several.get(3));
-		assertEquals("Check reverseAndConcat",(Integer)9,several.get(4));
-		assertEquals("Check reverseAndConcat",(Integer)3,several.get(5));
+		System.out.println(newSeveral);
+		assertEquals("Check reverseAndConcat",(Integer)11,newSeveral.get(0));
+		assertEquals("Check reverseAndConcat",(Integer)9,newSeveral.get(1));
+		assertEquals("Check reverseAndConcat",(Integer)3,newSeveral.get(2));
 	}
 	
 	/**Test sortLists method

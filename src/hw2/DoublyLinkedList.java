@@ -571,13 +571,26 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
    return new MyListIterator();
    }
    
-   
+	/**Reverse the list
+	 * 
+	 * @param the list to reverse
+	 */
    public void reverseAndConcat (DoublyLinkedList<E> newList){
-	   for(int i = newList.size()-1; i >= 0; i--){
-		   newList.add(newList.get(i));
-	   }
+	  
+		   for(int i = newList.size()-1; i >= 0; i--){
+			   this.add(newList.get(i));
+		   }
+		   for(int i = 0; i <= newList.size() - 1; i ++){
+			   this.add(this.getNth(i).data);
+		   }
+	   
    }
    
+	/**Add two list together and sort them
+	 * 
+	 * @param the list added
+	 * @param the list which shows the sorted list
+	 */
    public void sortLists(DoublyLinkedList<Integer> list2, 
 		   DoublyLinkedList<Integer> result){
 	   
@@ -601,6 +614,10 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 	   }
 	}
    
+	/**Rotate the list clockwise k times
+	 * 
+	 * @param the int which starts rotate clockwise
+	 */
    public void rotateList (int k){
 	   Node lastNode = this.getNth(nelems - 1);
 	   Node indexNode = this.getNth(nelems - k);
