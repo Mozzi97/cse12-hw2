@@ -222,7 +222,7 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 			if(!this.hasPrevious()){
 				return -1;
 			}
-			return index;  // XXX-CHANGE-XXX
+			return index - 1;  // XXX-CHANGE-XXX
 		}
 		
 		/**
@@ -339,9 +339,7 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		}
 		
 		Node curNode = head;
-//		Node preNode = new Node(null);
 		for(int i = 0; i <= index; i ++){
-//			preNode = curNode;
 			curNode = curNode.next;
 		}
 		Node newNode = new Node(data);
@@ -423,14 +421,13 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		if(o == null){
 			throw new NullPointerException();
 		}
-//		if(o instanceof DooublyLinkedList){
-		if(this.getNth(nelems - 1) != null){
-			return nelems - 1;
-		}
-		else{
-			return -1;	
+		for(int i = nelems - 1; i >= 0; i--){
+			if(this.getNth(i).data.equals(o)){
+				return i;
+			}
 		}
 	    //XXX-CHANGE-XXX
+		return -1;
 	}
 	/**
 	 * Sets the value of an element at a certain index in the list.
@@ -474,10 +471,6 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
 		if(index < 0 || index >= nelems){
 			throw new IndexOutOfBoundsException();
 		}
-//		Node nextNode = this.getNth(index).next;
-//		Node prevNode = this.getNth(index).prev;
-//		prevNode.next = nextNode;
-//		nextNode.prev = prevNode;
 		this.getNth(index).data = null;
 		return (E) this.getNth(index).data; // XXX-CHANGE-XXX
 	}
@@ -576,5 +569,29 @@ public class DoublyLinkedList<E> extends AbstractList<E> {
    {
    return new MyListIterator();
    }
-	 
+   
+   
+   public void reverseAndConcat (DoublyLinkedList<E> newList){
+	   for(int i = newList.size()-1; i >= 0; i--){
+		   newList.add(newList.get(i));
+	   }
+   }
+   
+   public void sortLists(DoublyLinkedList<Integer> list2, 
+		   DoublyLinkedList<Integer> result){
+	   for(int i = 0; i <= this.size() - 1; i ++){
+		   result.add(this.getNth(i).data);
+	   }
+	   for(int i = 0; i <= list2.size() - 1; i ++){
+		   result.add(list2.getNth(i).data);
+	   }
+	   for(int i = 0; i <= result.size() - 2; i ++){
+		   if(result.getNth(i).data > result.getNth(i + 1).data){
+			   Integer temp;
+			   temp = result.getNth(i).data;
+			   result.getNth(i).data = result.getNth(i + 1).data;
+			   result.getNth(i + 1).data = temp;
+		   }
+	   }
+	}
 }

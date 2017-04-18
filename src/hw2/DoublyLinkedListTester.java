@@ -168,7 +168,7 @@ public class DoublyLinkedListTester
   /**Test lastIndexOf method*/
   @Test
   public void testLastIndexOf(){
-	  assertEquals("Check get last index",1,slist.lastIndexOf(slist));
+	  assertEquals("Check get last index",0,slist.lastIndexOf("First"));
 	    try 
 	    {
 	      slist.lastIndexOf(null);
@@ -341,10 +341,8 @@ public class DoublyLinkedListTester
 	  ListIterator<Integer> ite;
 	  ite = several.listIterator();
 	  ite.next();
-	  ite.add((Integer) 4);
-	  ite.next(); ite.next(); ite.previous();
-
-	  assertEquals("Iterator previousIndex",(int) 2,ite.previousIndex());
+	  ite.next(); 
+	  assertEquals("Iterator previousIndex",(int) 0,ite.previousIndex());
   }
   
   /** Test iterator set method */
